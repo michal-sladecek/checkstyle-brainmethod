@@ -23,14 +23,14 @@ public class ControlNesting implements MethodMetric{
 
     @Override
     public void visitToken(DetailAST ast) {
-        if(ast.getType() == TokenTypes.LCURLY ){
+        if(ast.getType() == TokenTypes.SLIST ){
             currentNestingLevel++;
             maxNestingLevel = Math.max(currentNestingLevel, maxNestingLevel);
         }
     }
 
     public void leaveToken(DetailAST ast) {
-        if(ast.getType() == TokenTypes.LCURLY){
+        if(ast.getType() == TokenTypes.SLIST){
             currentNestingLevel--;
         }
     }

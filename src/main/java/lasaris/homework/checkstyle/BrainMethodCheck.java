@@ -51,6 +51,7 @@ public class BrainMethodCheck extends AbstractCheck {
                 TokenTypes.LITERAL_CASE,
                 TokenTypes.LITERAL_CATCH,
                 TokenTypes.QUESTION,
+                TokenTypes.SLIST,
                 TokenTypes.LAND,
                 TokenTypes.LOR,
                 TokenTypes.VARIABLE_DEF
@@ -78,7 +79,6 @@ public class BrainMethodCheck extends AbstractCheck {
 
     private void processVisitNormalToken(DetailAST ast){
         if(!inMethod) return;
-
         lineLengthCheck.visitToken(ast);
         cyclomaticComplexityCheck.visitToken(ast);
         variableCount.visitToken(ast);
