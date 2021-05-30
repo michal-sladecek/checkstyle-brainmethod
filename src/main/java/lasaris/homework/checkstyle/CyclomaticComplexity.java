@@ -4,8 +4,8 @@ import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 import java.math.BigInteger;
-import java.util.ArrayDeque;
-import java.util.Deque;
+
+
 
 public class CyclomaticComplexity implements MethodMetric {
     /** The initial current value. */
@@ -14,55 +14,6 @@ public class CyclomaticComplexity implements MethodMetric {
 
     /** The current value. */
     private BigInteger currentValue = INITIAL_VALUE;
-
-
-    public int[] getDefaultTokens() {
-        return new int[] {
-                TokenTypes.CTOR_DEF,
-                TokenTypes.METHOD_DEF,
-                TokenTypes.INSTANCE_INIT,
-                TokenTypes.STATIC_INIT,
-                TokenTypes.LITERAL_WHILE,
-                TokenTypes.LITERAL_DO,
-                TokenTypes.LITERAL_FOR,
-                TokenTypes.LITERAL_IF,
-                TokenTypes.LITERAL_SWITCH,
-                TokenTypes.LITERAL_CASE,
-                TokenTypes.LITERAL_CATCH,
-                TokenTypes.QUESTION,
-                TokenTypes.LAND,
-                TokenTypes.LOR,
-        };
-    }
-
-    public int[] getAcceptableTokens() {
-        return new int[] {
-                TokenTypes.CTOR_DEF,
-                TokenTypes.METHOD_DEF,
-                TokenTypes.INSTANCE_INIT,
-                TokenTypes.STATIC_INIT,
-                TokenTypes.LITERAL_WHILE,
-                TokenTypes.LITERAL_DO,
-                TokenTypes.LITERAL_FOR,
-                TokenTypes.LITERAL_IF,
-                TokenTypes.LITERAL_SWITCH,
-                TokenTypes.LITERAL_CASE,
-                TokenTypes.LITERAL_CATCH,
-                TokenTypes.QUESTION,
-                TokenTypes.LAND,
-                TokenTypes.LOR,
-        };
-    }
-
-    public final int[] getRequiredTokens() {
-        return new int[] {
-                TokenTypes.CTOR_DEF,
-                TokenTypes.METHOD_DEF,
-                TokenTypes.INSTANCE_INIT,
-                TokenTypes.STATIC_INIT,
-        };
-    }
-
 
     public int getMetric(){
         return currentValue.intValue();

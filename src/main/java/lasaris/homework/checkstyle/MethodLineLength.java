@@ -22,17 +22,8 @@ We did not find a way to extend this class in other way than completely rewritin
 
 
 public class MethodLineLength  implements MethodMetric {
-
-
+    
     int currentMethodLength = 0;
-
-    public int[] getDefaultTokens() {
-        return new int[] {
-                TokenTypes.METHOD_DEF,
-                TokenTypes.CTOR_DEF,
-        };
-    }
-
 
     public int getMetric(){
         return currentMethodLength;
