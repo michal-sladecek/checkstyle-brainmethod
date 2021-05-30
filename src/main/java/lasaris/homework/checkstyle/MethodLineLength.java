@@ -21,7 +21,10 @@ We did not find a way to extend this class in other way than completely rewritin
  */
 
 
-public class MethodLineLength  {
+public class MethodLineLength  implements MethodMetric {
+
+
+    int currentMethodLength = 0;
 
     public int[] getDefaultTokens() {
         return new int[] {
@@ -30,16 +33,23 @@ public class MethodLineLength  {
         };
     }
 
-    public int methodLength(DetailAST ast) {
+
+    public int getMetric(){
+        return currentMethodLength;
+    }
+
+
+    public void visitMethodDefinition(DetailAST ast) {
         final DetailAST openingBrace = ast.findFirstToken(TokenTypes.SLIST);
         if (openingBrace != null) {
             final DetailAST closingBrace =
                     openingBrace.findFirstToken(TokenTypes.RCURLY);
-            final int length = getLengthOfBlock(openingBrace, closingBrace);
-            return length;
-        } else {
-            return -1;
+            currentMethodLength = getLengthOfBlock(openingBrace, closingBrace);
         }
+    }
+
+    public void cleanupAfterMethod(){
+        currentMethodLength = 0;
     }
 
     /**
