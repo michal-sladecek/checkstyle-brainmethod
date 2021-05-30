@@ -6,11 +6,11 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 public class BrainMethodCheck extends AbstractCheck {
 
-
     boolean inMethod = false;
     MethodLineLength lineLengthCheck = new MethodLineLength();
     CyclomaticComplexity cyclomaticComplexityCheck = new CyclomaticComplexity();
     VariableCount variableCount = new VariableCount();
+    ControlNesting controlNesting = new ControlNesting();
 
     int maxLinesOfCode = 20;
     int maxCyclomaticComplexity = 5;
@@ -73,6 +73,7 @@ public class BrainMethodCheck extends AbstractCheck {
         lineLengthCheck.visitMethodDefinition(ast);
         cyclomaticComplexityCheck.visitMethodDefinition(ast);
         variableCount.visitMethodDefinition(ast);
+        controlNesting.visitMethodDefinition(ast);
     }
 
     private void processVisitNormalToken(DetailAST ast){
@@ -81,6 +82,7 @@ public class BrainMethodCheck extends AbstractCheck {
         lineLengthCheck.visitToken(ast);
         cyclomaticComplexityCheck.visitToken(ast);
         variableCount.visitToken(ast);
+        controlNesting.visitToken(ast);
     }
 
 
@@ -92,10 +94,12 @@ public class BrainMethodCheck extends AbstractCheck {
         log(ast.getLineNo(), String.format("Method has %d LOC.",lineLengthCheck.getMetric()));
         log(ast.getLineNo(), String.format("Method has %d cyclomatic complexity.",cyclomaticComplexityCheck.getMetric()));
         log(ast.getLineNo(), String.format("Method has %d variable definitions.",variableCount.getMetric()));
+        log(ast.getLineNo(), String.format("Method has %d control nesting depth.",controlNesting.getMetric()));
 */
         if(     lineLengthCheck.getMetric() > maxLinesOfCode &&
                 cyclomaticComplexityCheck.getMetric() > maxCyclomaticComplexity &&
-                variableCount.getMetric() > maxVariables
+                variableCount.getMetric() > maxVariables &&
+                controlNesting.getMetric() > maxNesting
         ){
             log(ast.getLineNo(), "Brain method");
         }
@@ -103,8 +107,13 @@ public class BrainMethodCheck extends AbstractCheck {
         lineLengthCheck.cleanupAfterMethod();
         cyclomaticComplexityCheck.cleanupAfterMethod();
         variableCount.cleanupAfterMethod();
+        controlNesting.cleanupAfterMethod();
     }
+    private void processLeaveNormalToken(DetailAST ast) {
+        if(!inMethod) return;
 
+        controlNesting.leaveToken(ast);
+    }
 
     @Override
     public void visitToken(DetailAST ast) {
@@ -120,9 +129,8 @@ public class BrainMethodCheck extends AbstractCheck {
     public void leaveToken(DetailAST ast) {
         if(ast.getType() == TokenTypes.METHOD_DEF || ast.getType() == TokenTypes.CTOR_DEF){
             processLeaveMethodDefinition(ast);
+        } else {
+            processLeaveNormalToken(ast);
         }
-
     }
-
-
 }
