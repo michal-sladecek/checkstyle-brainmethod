@@ -46,6 +46,12 @@ public class MethodLineLength  implements MethodMetric {
     public void visitToken(DetailAST ast){
         return;
     }
+
+    @Override
+    public void leaveToken(DetailAST ast) {
+
+    }
+
     /**
      * Returns length of code. We also count comments and empty lines.
      *

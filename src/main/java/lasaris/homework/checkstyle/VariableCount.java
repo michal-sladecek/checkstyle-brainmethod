@@ -27,4 +27,9 @@ public class VariableCount implements  MethodMetric{
             numberOfVariables++;
         }
     }
+
+    @Override
+    public void leaveToken(DetailAST ast) {
+
+    }
 }

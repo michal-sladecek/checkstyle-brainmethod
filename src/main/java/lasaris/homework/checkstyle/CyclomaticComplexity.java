@@ -54,6 +54,11 @@ public class CyclomaticComplexity implements MethodMetric {
         }
     }
 
+    @Override
+    public void leaveToken(DetailAST ast) {
+        
+    }
+
     /**
      * Increments the current value by a specified amount.
      *

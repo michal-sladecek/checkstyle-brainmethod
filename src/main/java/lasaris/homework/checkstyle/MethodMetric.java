@@ -28,4 +28,9 @@ public interface MethodMetric {
     Visit of other token than beginning of method.
      */
     public void visitToken(DetailAST ast);
+
+    /*
+    Leave token.
+     */
+    public void leaveToken(DetailAST ast);
 }
