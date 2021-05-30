@@ -23,5 +23,6 @@ public interface MethodMetric {
     Indicates that the processing of current method is finished and class can clean up.
      */
     public void cleanupAfterMethod();
-    
+
+    public void visitToken(DetailAST ast);
 }

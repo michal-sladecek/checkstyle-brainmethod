@@ -66,26 +66,39 @@ public class BrainMethodCheck extends AbstractCheck {
     }
 
 
-    public void processVisitMethodDefinition(DetailAST ast){
+    private void processVisitMethodDefinition(DetailAST ast){
         lineLengthCheck.visitMethodDefinition(ast);
+        cyclomaticComplexityCheck.visitMethodDefinition(ast);
+    }
+
+    private void processVisitNormalToken(DetailAST ast){
+        lineLengthCheck.visitToken(ast);
         cyclomaticComplexityCheck.visitToken(ast);
     }
 
-    public void processLeaveMethodDefinition(DetailAST ast){
-        if(lineLengthCheck.getMetric() > maxLinesOfCode){
+
+
+    private void processLeaveMethodDefinition(DetailAST ast){
+        if(     lineLengthCheck.getMetric() > maxLinesOfCode &&
+                cyclomaticComplexityCheck.getMetric() > maxCyclomaticComplexity
+        ){
             log(ast.getLineNo(), "Brain method");
         }
 
-
         lineLengthCheck.cleanupAfterMethod();
+        cyclomaticComplexityCheck.cleanupAfterMethod();
     }
+
 
     @Override
     public void visitToken(DetailAST ast) {
         if(ast.getType() == TokenTypes.METHOD_DEF || ast.getType() == TokenTypes.CTOR_DEF){
             processVisitMethodDefinition(ast);
+        } else{
+            processVisitNormalToken(ast);
         }
     }
+
 
     @Override
     public void leaveToken(DetailAST ast) {
