@@ -56,7 +56,7 @@ public class CyclomaticComplexity implements MethodMetric {
 
     @Override
     public void leaveToken(DetailAST ast) {
-        
+
     }
 
     /**
