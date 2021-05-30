@@ -9,7 +9,7 @@ public class BrainMethodCheck extends AbstractCheck {
 
     MethodLineLength lineLengthCheck = new MethodLineLength();
     CyclomaticComplexity cyclomaticComplexityCheck = new CyclomaticComplexity();
-
+    VariableCount variableCount = new VariableCount();
 
     int maxLinesOfCode;
     int maxCyclomaticComplexity;
@@ -51,7 +51,8 @@ public class BrainMethodCheck extends AbstractCheck {
                 TokenTypes.LITERAL_CATCH,
                 TokenTypes.QUESTION,
                 TokenTypes.LAND,
-                TokenTypes.LOR
+                TokenTypes.LOR,
+                TokenTypes.VARIABLE_DEF
         };
     }
 
@@ -69,24 +70,28 @@ public class BrainMethodCheck extends AbstractCheck {
     private void processVisitMethodDefinition(DetailAST ast){
         lineLengthCheck.visitMethodDefinition(ast);
         cyclomaticComplexityCheck.visitMethodDefinition(ast);
+        variableCount.visitMethodDefinition(ast);
     }
 
     private void processVisitNormalToken(DetailAST ast){
         lineLengthCheck.visitToken(ast);
         cyclomaticComplexityCheck.visitToken(ast);
+        variableCount.visitToken(ast);
     }
 
 
 
     private void processLeaveMethodDefinition(DetailAST ast){
         if(     lineLengthCheck.getMetric() > maxLinesOfCode &&
-                cyclomaticComplexityCheck.getMetric() > maxCyclomaticComplexity
+                cyclomaticComplexityCheck.getMetric() > maxCyclomaticComplexity &&
+                variableCount.getMetric() > maxVariables
         ){
             log(ast.getLineNo(), "Brain method");
         }
 
         lineLengthCheck.cleanupAfterMethod();
         cyclomaticComplexityCheck.cleanupAfterMethod();
+        variableCount.cleanupAfterMethod();
     }
 
 
