@@ -22,7 +22,7 @@ We did not find a way to extend this class in other way than completely rewritin
 
 
 public class MethodLineLength  implements MethodMetric {
-    
+
     int currentMethodLength = 0;
 
     public int getMetric(){

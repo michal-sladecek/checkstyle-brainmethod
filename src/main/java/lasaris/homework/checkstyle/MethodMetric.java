@@ -24,5 +24,8 @@ public interface MethodMetric {
      */
     public void cleanupAfterMethod();
 
+    /*
+    Visit of other token than beginning of method.
+     */
     public void visitToken(DetailAST ast);
 }
