@@ -7,14 +7,15 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 public class BrainMethodCheck extends AbstractCheck {
 
 
+    boolean inMethod = false;
     MethodLineLength lineLengthCheck = new MethodLineLength();
     CyclomaticComplexity cyclomaticComplexityCheck = new CyclomaticComplexity();
     VariableCount variableCount = new VariableCount();
 
-    int maxLinesOfCode;
-    int maxCyclomaticComplexity;
-    int maxNesting;
-    int maxVariables;
+    int maxLinesOfCode = 20;
+    int maxCyclomaticComplexity = 5;
+    int maxNesting = 2;
+    int maxVariables = 4;
 
 
 
@@ -68,12 +69,15 @@ public class BrainMethodCheck extends AbstractCheck {
 
 
     private void processVisitMethodDefinition(DetailAST ast){
+        inMethod = true;
         lineLengthCheck.visitMethodDefinition(ast);
         cyclomaticComplexityCheck.visitMethodDefinition(ast);
         variableCount.visitMethodDefinition(ast);
     }
 
     private void processVisitNormalToken(DetailAST ast){
+        if(!inMethod) return;
+
         lineLengthCheck.visitToken(ast);
         cyclomaticComplexityCheck.visitToken(ast);
         variableCount.visitToken(ast);
@@ -82,6 +86,13 @@ public class BrainMethodCheck extends AbstractCheck {
 
 
     private void processLeaveMethodDefinition(DetailAST ast){
+        inMethod = false;
+/*
+        // Uncomment for debugging purposes
+        log(ast.getLineNo(), String.format("Method has %d LOC.",lineLengthCheck.getMetric()));
+        log(ast.getLineNo(), String.format("Method has %d cyclomatic complexity.",cyclomaticComplexityCheck.getMetric()));
+        log(ast.getLineNo(), String.format("Method has %d variable definitions.",variableCount.getMetric()));
+*/
         if(     lineLengthCheck.getMetric() > maxLinesOfCode &&
                 cyclomaticComplexityCheck.getMetric() > maxCyclomaticComplexity &&
                 variableCount.getMetric() > maxVariables
