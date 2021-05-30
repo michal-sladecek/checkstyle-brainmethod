@@ -7,9 +7,7 @@ import java.math.BigInteger;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-public class CyclomaticComplexity {
-
-
+public class CyclomaticComplexity implements MethodMetric {
     /** The initial current value. */
     private static final BigInteger INITIAL_VALUE = BigInteger.ONE;
 
@@ -65,25 +63,19 @@ public class CyclomaticComplexity {
         };
     }
 
-    public void visitToken(DetailAST ast) {
-        switch (ast.getType()) {
-            case TokenTypes.CTOR_DEF:
-            case TokenTypes.METHOD_DEF:
-            case TokenTypes.INSTANCE_INIT:
-            case TokenTypes.STATIC_INIT:
-                break;
-            default:
-                visitTokenHook(ast);
-        }
+
+    public int getMetric(){
+        return currentValue.intValue();
     }
 
-    public void leaveToken(DetailAST ast) {
+    @Override
+    public void visitMethodDefinition(DetailAST ast) {
+
+    }
+
+    @Override
+    public void cleanupAfterMethod() {
         currentValue = INITIAL_VALUE;
-        return;
-    }
-
-    public BigInteger getCyclomaticComplexity(){
-        return currentValue;
     }
 
     /**
@@ -92,7 +84,8 @@ public class CyclomaticComplexity {
      *
      * @param ast the token being visited
      */
-    private void visitTokenHook(DetailAST ast) {
+    @Override
+    public void visitToken(DetailAST ast) {
         switch(ast.getType()){
             case TokenTypes.LITERAL_WHILE:
             case TokenTypes.LITERAL_DO:
